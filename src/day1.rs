@@ -1,28 +1,34 @@
 pub mod part_one {
+    use super::{parse_to_ints, track_depths};
+
     pub fn count_increases(input: &str) -> i32 {
-        input
-            .lines()
-            .flat_map(str::parse::<isize>)
-            .fold((-1, 0), |(count, prev), depth| {
-                (count + ((depth - prev > 0) as i32), depth)
-            })
-            .0
+        parse_to_ints(input).fold((-1, 0), track_depths).0
     }
 }
 
 pub mod part_two {
+    use super::{parse_to_ints, sum_slice, track_depths};
+
     pub fn count_increases(input: &str) -> i32 {
-        input
-            .split('\n')
-            .flat_map(str::parse::<isize>)
-            .collect::<Vec<isize>>()
+        parse_to_ints(input)
+            .collect::<Vec<_>>()
             .windows(3)
-            .map(|window| window.iter().sum())
-            .fold((-1, 0), |(count, prev), depth| {
-                (count + ((depth - prev > 0) as i32), depth)
-            })
+            .map(sum_slice)
+            .fold((-1, 0), track_depths)
             .0
     }
+}
+
+fn sum_slice(slice: &[isize]) -> isize {
+    slice.iter().sum()
+}
+
+fn parse_to_ints(input: &str) -> impl Iterator<Item = isize> + '_ {
+    input.lines().flat_map(str::parse::<isize>)
+}
+
+fn track_depths((count, prev): (i32, isize), depth: isize) -> (i32, isize) {
+    (count + ((depth - prev > 0) as i32), depth)
 }
 
 #[cfg(test)]
