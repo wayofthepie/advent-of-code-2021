@@ -2,18 +2,19 @@ fn main() {
     println!("Hello, world!");
 }
 
-fn aoc1(input: &str) -> usize {
-    let r = input
+pub fn aoc1(input: &str) -> i32 {
+    input
         .lines()
         .into_iter()
-        .map(|s| s.parse::<usize>().unwrap())
-        .reduce(|acc, depth| 1)
-        .unwrap();
-    r
+        .flat_map(|s| s.parse::<isize>())
+        .fold((-1, 0), |(count, prev), depth| {
+            (count + ((depth - prev > 0) as i32), depth)
+        })
+        .0
 }
 
 #[test]
-fn test_aoc1() {
+fn test_aoc1_example() {
     let i = r#"199
 200
 208
@@ -26,4 +27,12 @@ fn test_aoc1() {
 263"#;
     let result = aoc1(i);
     assert_eq!(result, 7)
+}
+
+#[test]
+fn test_aoc1() {
+    let i = include_str!("../resources/aoc1.txt").trim();
+    let result = aoc1(i);
+
+    assert_eq!(result, 1692)
 }
