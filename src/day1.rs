@@ -2,8 +2,7 @@ pub mod part_one {
     pub fn count_increases(input: &str) -> i32 {
         input
             .lines()
-            .into_iter()
-            .flat_map(|s| s.parse::<isize>())
+            .flat_map(str::parse::<isize>)
             .fold((-1, 0), |(count, prev), depth| {
                 (count + ((depth - prev > 0) as i32), depth)
             })
