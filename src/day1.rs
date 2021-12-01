@@ -7,19 +7,19 @@ pub mod part_one {
 }
 
 pub mod part_two {
-    use super::{parse_to_ints, sum_slice, track_depths};
+    use super::{parse_to_ints, sum, track_depths};
 
     pub fn count_increases(input: &str) -> i32 {
         parse_to_ints(input)
             .collect::<Vec<_>>()
             .windows(3)
-            .map(sum_slice)
+            .map(sum)
             .fold((-1, 0), track_depths)
             .0
     }
 }
 
-fn sum_slice(slice: &[isize]) -> isize {
+fn sum(slice: &[isize]) -> isize {
     slice.iter().sum()
 }
 
